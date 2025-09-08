@@ -1,0 +1,609 @@
+---
+import LanguageSwitcher from '../components/react/LanguageSwitcher.tsx';
+
+export interface Props {
+  title: string;
+  description?: string;
+  className?: string;
+}
+
+const { 
+  title, 
+  description = "Professional MBTI personality test to understand your personality type and discover your inner potential.",
+  className = ""
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#dc2626" />
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    
+    <!-- Preload Critical Resources -->
+    <!-- <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin> -->
+    
+    <!-- Critical CSS will be inlined by Astro -->
+    <style>
+      /* Critical above-the-fold styles */
+      html {
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        scroll-behavior: smooth;
+      }
+      
+      body {
+        margin: 0;
+        background: #f0fdf4;  /* 淡绿色背景 */
+        min-height: 100vh;
+      }
+      
+      /* Loading state */
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(220, 38, 38, 0.3);
+        border-radius: 50%;
+        border-top-color: #dc2626;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* 确保按钮在移动端有足够的点击区域 */
+      @media (max-width: 768px) {
+        button {
+          min-height: 44px;
+          min-width: 44px;
+        }
+      }
+    </style>
+  </head>
+  
+  <body class={className}>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-md z-50">
+      跳转到主要内容
+    </a>
+    
+    <!-- Header -->
+    <header class="bg-secondary-50/90 backdrop-blur-sm border-b border-secondary-200 sticky top-0 z-40">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-sm">M</span>
+            </div>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent" data-i18n="home.title">
+              MBTI Personality Test
+            </h1>
+          </div>
+          
+          <div class="flex items-center space-x-6">
+            <!-- Navigation -->
+            <nav class="hidden md:flex space-x-6">
+              <a href="/" class="text-gray-600 hover:text-primary-600 transition-colors" data-i18n="common.home">Home</a>
+              <div class="relative test-menu-container">
+                <button class="text-gray-600 hover:text-primary-600 transition-colors flex items-center space-x-1 test-menu-button" data-i18n="common.test">
+                  Test
+                  <svg class="w-4 h-4 transition-transform test-menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 hidden test-menu-dropdown">
+                  <a href="/test?shuffle=true" class="block px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors" data-i18n="nav.test_shuffled">
+                    Random Order Test
+                  </a>
+                  <a href="/test?shuffle=false" class="block px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors border-t border-gray-100" data-i18n="nav.test_ordered">
+                    Sequential Order Test
+                  </a>
+                </div>
+              </div>
+            </nav>
+            
+            <!-- Spacer for better separation -->
+            <div class="hidden md:block w-px h-6 bg-gray-300"></div>
+            
+            <!-- Language Switcher -->
+            <LanguageSwitcher client:load />
+            
+            <!-- Mobile menu button -->
+            <button class="md:hidden p-2 rounded-md text-gray-600 hover:text-primary-600" aria-label="菜单">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="min-h-screen">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-secondary-50 border-t border-secondary-100 mt-auto">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4" data-i18n="footer.about_title">About MBTI</h3>
+            <p class="text-gray-600 text-sm leading-relaxed" data-i18n="footer.about_desc">
+              A personality-type test based on psychological theories to help you better understand your traits and behavior patterns.
+            </p>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4" data-i18n="footer.features_title">Features</h3>
+            <ul class="text-gray-600 text-sm space-y-2">
+              <li data-i18n="footer.features_1">• 68 professional questions</li>
+              <li data-i18n="footer.features_2">• 24h progress protection</li>
+              <li data-i18n="footer.features_3">• Detailed results analysis</li>
+              <li data-i18n="footer.features_4">• Mobile optimization</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4" data-i18n="footer.tips_title">Tips</h3>
+            <ul class="text-gray-600 text-sm space-y-2">
+              <li data-i18n="footer.tips_1">• Answer honestly</li>
+              <li data-i18n="footer.tips_2">• Choose the most fitting option</li>
+              <li data-i18n="footer.tips_3">• Do not overthink</li>
+              <li data-i18n="footer.tips_4">• Trust your first instinct</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-primary-100 mt-8 pt-6 text-center">
+          <p class="text-gray-500 text-sm" data-i18n="footer.copyright">
+            © 2024 MBTI Personality Test. This test is for reference only and not a professional diagnosis.
+          </p>
+        </div>
+      </div>
+    </footer>
+    
+    <!-- Global Scripts -->
+    <script>
+      // Inline translations for basic navigation
+      const translations = {
+        'zh-CN': {
+          'common.home': '首页',
+          'common.test': '开始测试',
+          'nav.test_shuffled': '打乱顺序测试',
+          'nav.test_ordered': '按序测试',
+          'home.title': 'MBTI 性格测试',
+          // index hero
+          'index.hero_title': 'MBTI性格测试',
+          'index.hero_subtitle': '基于心理学理论的专业性格测试，帮助您深入了解自己的性格类型、行为模式和内在潜能',
+          'index.feature_68': '86道专业题目',
+          'index.feature_cache': '24小时进度保护',
+          'index.feature_detail': '详细结果分析',
+          'index.cta_start': '开始测试',
+          'index.estimate': '预计用时：15-20分钟 | 完全免费 | 无需注册',
+          'index.features_title': '测试特色',
+          'index.feature_title_reliable': '专业可靠',
+          'index.feature_desc_reliable': '基于权威心理学理论，采用对称计分算法，确保测试结果的准确性和科学性。',
+          'index.feature_title_cache': '智能缓存',
+          'index.feature_desc_cache': '24小时本地缓存保护，意外关闭页面后可自动恢复到上次答题位置。',
+          'index.feature_title_analysis': '深度分析',
+          'index.feature_desc_analysis': '详细的性格分析报告，包含优势特点、发展建议和职业方向指导。',
+          'index.how_title': '测试流程',
+          'index.how_step1_title': '回答问题',
+          'index.how_step1_desc': '86道精心设计的题目，每题使用1-5分量表评估您的偏好程度。',
+          'index.how_step2_title': '智能分析',
+          'index.how_step2_desc': '系统采用对称计分算法，确保四个维度的平衡性和准确性。',
+          'index.how_step3_title': '获得结果',
+          'index.how_step3_desc': '获得详细的MBTI类型报告，包含性格描述、优势分析和发展建议。',
+          'index.faq_title': '常见问题',
+          'index.faq_q1': '测试需要多长时间？',
+          'index.faq_a1': '一般需要15-20分钟完成全部86道题目。您可以按照自己的节奏进行，系统会自动保存进度。',
+          'index.faq_q2': '如果中途关闭页面会怎样？',
+          'index.faq_a2': '不用担心！系统会自动保存您的答题进度24小时，重新打开页面时会自动恢复到上次的位置。',
+          'index.faq_q3': '测试结果准确吗？',
+          'index.faq_a3': '我们的测试基于权威的MBTI理论，采用科学的计分方法。结果可作为了解自己的参考，但不构成专业诊断。',
+          'index.faq_q4': '如何获得最准确的结果？',
+          'index.faq_a4': '请诚实、快速地根据第一直觉作答。',
+          'index.final_title': '准备开始了吗？',
+          'index.final_desc': '通过MBTI测试，发现真实的自己，了解您的性格优势，找到最适合的发展方向。',
+          'index.final_button': '立即开始测试',
+          'index.what_title': '什么是MBTI？',
+          'index.what_p1': 'MBTI（Myers-Briggs Type Indicator）是一种广泛使用的人格类型理论，它将人的性格分为16种不同的类型。',
+          'index.what_p2': '每种类型由四个维度组成，帮助您了解自己在不同情境下的偏好和行为模式：',
+          'index.dim_energy_title': '能量导向',
+          'index.dim_energy_pair': '外向 vs 内向',
+          'index.dim_info_title': '信息获取',
+          'index.dim_info_pair': '感觉 vs 直觉',
+          'index.dim_decision_title': '决策方式',
+          'index.dim_decision_pair': '思考 vs 情感',
+          'index.dim_lifestyle_title': '生活方式',
+          'index.dim_lifestyle_pair': '判断 vs 知觉',
+          // test page
+          'test.title': 'MBTI性格测试',
+          'test.intro': '请根据您的真实感受和第一直觉来回答问题。没有标准答案，选择最符合您想法的选项即可。',
+          'test.tips_honest': '诚实回答',
+          'test.tips_instinct': '相信直觉',
+          'test.tips_fast': '无需思考太久',
+          'test.suggest_title': '答题建议',
+          'test.suggest_1': '选择最接近您真实想法的选项',
+          'test.suggest_2': '不要过度分析，相信第一反应',
+          'test.suggest_3': '基于自己的自然状态回答',
+          'test.scoring_title': '评分说明',
+          'test.score_1': '1分',
+          'test.score_1_text': '完全不同意',
+          'test.score_2': '2分',
+          'test.score_2_text': '比较不同意',
+          'test.score_3': '3分',
+          'test.score_3_text': '中立/不确定',
+          'test.score_4': '4分',
+          'test.score_4_text': '比较同意',
+          'test.score_5': '5分',
+          'test.score_5_text': '完全同意',
+          'test.progress_title': '进度自动保存',
+          'test.progress_text': '您的答题进度会自动保存24小时，即使意外关闭页面也不会丢失。可以随时暂停，稍后继续完成。',
+          // result page
+          'result.loading': '正在分析您的性格类型...',
+          'result.no_result_title': '未找到测试结果',
+          'result.no_result_desc': '请先完成MBTI性格测试才能查看结果。',
+          'result.start_test': '开始测试',
+          'result.analysis_title': '维度分析',
+          'result.analysis_desc': '以下显示了您在四个核心维度上的偏好强度',
+          'result.strengths': '优势特点',
+          'result.weaknesses': '注意事项',
+          'result.careers': '适合的职业方向',
+          'result.retake': '重新测试',
+          'result.download': '下载结果',
+          'result.disclaimer': '结果仅供参考，不构成专业心理学诊断',
+          'share.copy': '复制链接',
+          // footer
+          'footer.about_title': '关于MBTI',
+          'footer.about_desc': '基于心理学理论的性格类型测试，帮助您更好地了解自己的性格特点和行为模式。',
+          'footer.features_title': '测试特色',
+          'footer.features_1': '• 86道专业题目',
+          'footer.features_2': '• 24小时进度保护',
+          'footer.features_3': '• 详细结果分析',
+          'footer.features_4': '• 移动端优化',
+          'footer.tips_title': '使用提示',
+          'footer.tips_1': '• 诚实回答每个问题',
+          'footer.tips_2': '• 选择最符合的选项',
+          'footer.tips_3': '• 无需过度思考',
+          'footer.tips_4': '• 相信第一直觉',
+          'footer.copyright': '© 2024 MBTI性格测试. 本测试仅供参考，不构成专业心理学诊断。',
+        },
+        'en-US': {
+          'common.home': 'Home',
+          'common.test': 'Test',
+          'nav.test_shuffled': 'Random Order Test',
+          'nav.test_ordered': 'Sequential Order Test',
+          'home.title': 'MBTI Personality Test',
+          // index hero
+          'index.hero_title': 'MBTI Personality Test',
+          'index.hero_subtitle': 'A professional test based on psychology to help you understand your personality type, behavior patterns, and inner potential.',
+          'index.feature_68': '86 professional questions',
+          'index.feature_cache': '24h progress protection',
+          'index.feature_detail': 'Detailed results analysis',
+          'index.cta_start': 'Start Test',
+          'index.estimate': 'Estimated: 15–20 min | Free | No sign-up',
+          'index.features_title': 'Features',
+          'index.feature_title_reliable': 'Reliable & Professional',
+          'index.feature_desc_reliable': 'Based on authoritative psychology theories with symmetric scoring to ensure accuracy and scientific validity.',
+          'index.feature_title_cache': 'Smart Caching',
+          'index.feature_desc_cache': '24h local caching to restore your last progress even after accidental closure.',
+          'index.feature_title_analysis': 'In-depth Analysis',
+          'index.feature_desc_analysis': 'Detailed analysis report with strengths, growth advice, and career guidance.',
+          'index.how_title': 'How it works',
+          'index.how_step1_title': 'Answer questions',
+          'index.how_step1_desc': '86 carefully designed items with a 1–5 Likert scale.',
+          'index.how_step2_title': 'Smart analysis',
+          'index.how_step2_desc': 'Symmetric scoring ensures balanced and accurate dimensions.',
+          'index.how_step3_title': 'Get results',
+          'index.how_step3_desc': 'Receive a detailed MBTI report with descriptions and advice.',
+          'index.faq_title': 'FAQ',
+          'index.faq_q1': 'How long does it take?',
+          'index.faq_a1': 'Usually 15–20 minutes for all 86 questions. Your progress is auto-saved.',
+          'index.faq_q2': 'What if I close the page?',
+          'index.faq_a2': 'No worries! Progress is saved for 24 hours and restored on reopen.',
+          'index.faq_q3': 'Are the results accurate?',
+          'index.faq_a3': 'Based on established MBTI theory and scientific scoring. For reference only.',
+          'index.faq_q4': 'Tips for best accuracy?',
+          'index.faq_a4': 'Answer honestly and quickly based on your first instinct.',
+          'index.final_title': 'Ready to start?',
+          'index.final_desc': 'Take the MBTI test to discover yourself, understand your strengths, and find the best direction.',
+          'index.final_button': 'Start Now',
+          'index.what_title': 'What is MBTI?',
+          'index.what_p1': 'MBTI (Myers-Briggs Type Indicator) is a widely used personality framework that categorizes people into 16 distinct personality types.',
+          'index.what_p2': 'Each type is composed of four dimensions and helps you understand your preferences and behavior patterns in different contexts:',
+          'index.dim_energy_title': 'Energy Orientation',
+          'index.dim_energy_pair': 'Extroversion vs Introversion',
+          'index.dim_info_title': 'Information Gathering',
+          'index.dim_info_pair': 'Sensing vs Intuition',
+          'index.dim_decision_title': 'Decision Making',
+          'index.dim_decision_pair': 'Thinking vs Feeling',
+          'index.dim_lifestyle_title': 'Lifestyle',
+          'index.dim_lifestyle_pair': 'Judging vs Perceiving',
+          // test page
+          'test.title': 'MBTI Personality Test',
+          'test.intro': 'Answer according to your true feelings and first instinct. There are no right or wrong answers.',
+          'test.tips_honest': 'Be honest',
+          'test.tips_instinct': 'Trust your instinct',
+          'test.tips_fast': 'Do not overthink',
+          'test.suggest_title': 'Suggestions',
+          'test.suggest_1': 'Choose the option closest to your true thoughts',
+          'test.suggest_2': 'Avoid over-analysis, trust your first reaction',
+          'test.suggest_3': 'Answer based on your natural state',
+          'test.scoring_title': 'Scoring Guide',
+          'test.score_1': '1',
+          'test.score_1_text': 'Strongly Disagree',
+          'test.score_2': '2',
+          'test.score_2_text': 'Disagree',
+          'test.score_3': '3',
+          'test.score_3_text': 'Neutral/Unsure',
+          'test.score_4': '4',
+          'test.score_4_text': 'Agree',
+          'test.score_5': '5',
+          'test.score_5_text': 'Strongly Agree',
+          'test.progress_title': 'Progress Auto-Save',
+          'test.progress_text': 'Your answers are saved for 24 hours locally. You can pause anytime and resume later.',
+          // result page
+          'result.loading': 'Analyzing your personality type...',
+          'result.no_result_title': 'No test result found',
+          'result.no_result_desc': 'Please complete the MBTI test first to view the results.',
+          'result.start_test': 'Start Test',
+          'result.analysis_title': 'Dimension Analysis',
+          'result.analysis_desc': 'Your preference strength across the four core dimensions is shown below.',
+          'result.strengths': 'Strengths',
+          'result.weaknesses': 'Areas for Attention',
+          'result.careers': 'Suggested Careers',
+          'result.retake': 'Retake Test',
+          'result.download': 'Download Result',
+          'result.disclaimer': 'For reference only. Not a professional diagnosis.',
+          'share.copy': 'Copy Link',
+          // footer
+          'footer.about_title': 'About MBTI',
+          'footer.about_desc': 'A personality-type test based on psychological theories to help you better understand your traits and behavior patterns.',
+          'footer.features_title': 'Features',
+          'footer.features_1': '• 86 professional questions',
+          'footer.features_2': '• 24h progress protection',
+          'footer.features_3': '• Detailed results analysis',
+          'footer.features_4': '• Mobile optimization',
+          'footer.tips_title': 'Tips',
+          'footer.tips_1': '• Answer honestly',
+          'footer.tips_2': '• Choose the most fitting option',
+          'footer.tips_3': '• Do not overthink',
+          'footer.tips_4': '• Trust your first instinct',
+          'footer.copyright': '© 2024 MBTI Personality Test. This test is for reference only and not a professional diagnosis.',
+        },
+        'ja-JP': {
+          // footer
+          'footer.about_title': 'MBTIについて',
+          'footer.about_desc': '心理学理論に基づく性格タイプ診断で、自分の特性や行動パターンを理解するのに役立ちます。',
+          'footer.features_title': '特長',
+          'footer.features_1': '• 全86問の専門設問',
+          'footer.features_2': '• 24時間の進捗保護',
+          'footer.features_3': '• 詳細な結果分析',
+          'footer.features_4': '• モバイル最適化',
+          'footer.tips_title': '利用のヒント',
+          'footer.tips_1': '• 正直に回答する',
+          'footer.tips_2': '• 最も適した選択肢を選ぶ',
+          'footer.tips_3': '• 考え過ぎない',
+          'footer.tips_4': '• 第一直感を信じる',
+          'footer.copyright': '© 2024 MBTI 性格診断。参考情報であり、専門的な診断ではありません。',
+          'common.home': 'ホーム',
+          'common.test': 'テスト',
+          'nav.test_shuffled': 'ランダム順テスト',
+          'nav.test_ordered': '順序通りテスト',
+          'home.title': 'MBTI 性格診断',
+          // index hero
+          'index.hero_title': 'MBTI 性格診断',
+          'index.hero_subtitle': '心理学に基づく専門的な診断で、あなたの性格タイプ、行動パターン、内なる可能性を理解します。',
+          'index.feature_68': '全86問の専門設問',
+          'index.feature_cache': '24時間の進捗保護',
+          'index.feature_detail': '詳細な結果分析',
+          'index.cta_start': 'テスト開始',
+          'index.estimate': '所要時間: 15–20分 | 無料 | 登録不要',
+          'index.features_title': '特長',
+          'index.feature_title_reliable': '信頼性と専門性',
+          'index.feature_desc_reliable': '権威ある心理学理論に基づき、対称スコアリングで正確性を確保します。',
+          'index.feature_title_cache': 'スマート保存',
+          'index.feature_desc_cache': '24時間のローカル保存で、誤って閉じても前回の位置を復元。',
+          'index.feature_title_analysis': '詳細分析',
+          'index.feature_desc_analysis': '強み、成長アドバイス、キャリア指針を含む詳細レポート。',
+          'index.how_title': 'テストの流れ',
+          'index.how_step1_title': '質問に回答',
+          'index.how_step1_desc': '全86問、1～5のリッカート尺度で評価します。',
+          'index.how_step2_title': 'スマート分析',
+          'index.how_step2_desc': '対称スコアリングで4次元のバランスと正確性を担保します。',
+          'index.how_step3_title': '結果を見る',
+          'index.how_step3_desc': '性格記述とアドバイスを含む詳細レポートを受け取ります。',
+          'index.faq_title': 'よくある質問',
+          'index.faq_q1': '所要時間は？',
+          'index.faq_a1': '全86問で通常15～20分。進捗は自動保存されます。',
+          'index.faq_q2': '途中でページを閉じたら？',
+          'index.faq_a2': 'ご安心ください。進捗は24時間保存され、再開時に復元されます。',
+          'index.faq_q3': '結果は正確ですか？',
+          'index.faq_a3': '確立されたMBTI理論と科学的スコアリングに基づきます。参考情報です。',
+          'index.faq_q4': 'より正確にするコツ？',
+          'index.faq_a4': '正直に、第一直感で素早く回答してください。',
+          'index.final_title': '準備はいいですか？',
+          'index.final_desc': 'MBTI診断で自分を発見し、強みを理解し、最適な方向性を見つけましょう。',
+          'index.final_button': '今すぐ開始',
+          'index.what_title': 'MBTIとは？',
+          'index.what_p1': 'MBTI（Myers-Briggs Type Indicator）は、16種類の性格タイプに分類する広く使われている性格モデルです。',
+          'index.what_p2': '各タイプは4つの次元から構成され、さまざまな状況での嗜好や行動パターンを理解するのに役立ちます。',
+          'index.dim_energy_title': 'エネルギーの方向',
+          'index.dim_energy_pair': '外向 vs 内向',
+          'index.dim_info_title': '情報収集',
+          'index.dim_info_pair': '感覚 vs 直感',
+          'index.dim_decision_title': '意思決定',
+          'index.dim_decision_pair': '思考 vs 感情',
+          'index.dim_lifestyle_title': 'ライフスタイル',
+          'index.dim_lifestyle_pair': '判断 vs 知覚',
+          // test page
+          'test.title': 'MBTI 性格診断',
+          'test.intro': '本当の気持ちと第一直感に基づいて回答してください。正解・不正解はありません。',
+          'test.tips_honest': '正直に答える',
+          'test.tips_instinct': '直感を信じる',
+          'test.tips_fast': '考え過ぎない',
+          'test.suggest_title': '回答のコツ',
+          'test.suggest_1': '最も自分の考えに近い選択肢を選ぶ',
+          'test.suggest_2': '過度な分析は避け、第一反応を信じる',
+          'test.suggest_3': '自然な状態に基づいて回答する',
+          'test.scoring_title': 'スコアリング',
+          'test.score_1': '1',
+          'test.score_1_text': '強く反対',
+          'test.score_2': '2',
+          'test.score_2_text': '反対',
+          'test.score_3': '3',
+          'test.score_3_text': '中立/不明',
+          'test.score_4': '4',
+          'test.score_4_text': '賛成',
+          'test.score_5': '5',
+          'test.score_5_text': '強く賛成',
+          'test.progress_title': '進捗は自動保存',
+          'test.progress_text': '回答はローカルに24時間保存されます。いつでも中断・再開が可能です。',
+          // result page
+          'result.loading': '性格タイプを分析中...',
+          'result.no_result_title': '結果が見つかりません',
+          'result.no_result_desc': 'まずMBTI診断を完了してください。',
+          'result.start_test': 'テスト開始',
+          'result.analysis_title': '次元分析',
+          'result.analysis_desc': '4つの核心次元における嗜好の強度を示します。',
+          'result.strengths': '強み',
+          'result.weaknesses': '注意点',
+          'result.careers': '適した職業',
+          'result.retake': '再テスト',
+          'result.download': '結果をダウンロード',
+          'result.disclaimer': '参考情報であり、専門的な診断ではありません。',
+          'share.copy': 'リンクをコピー',
+        }
+      };
+      
+      // Get current language from localStorage
+      function getCurrentLanguage() {
+        const saved = localStorage.getItem('mbti-language');
+        if (saved && translations[saved]) {
+          return saved;
+        }
+        // Default to English when no saved preference
+        return 'en-US';
+      }
+      
+      // Update page content based on current language
+      function updatePageContent() {
+        const currentLang = getCurrentLanguage();
+        const langTranslations = translations[currentLang] || translations['en-US'];
+        
+        // Update document language
+        document.documentElement.lang = currentLang === 'zh-CN' ? 'zh-CN' : 
+                                       currentLang === 'ja-JP' ? 'ja-JP' : 'en-US';
+        
+        // Update all elements with data-i18n attributes
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+          const key = element.getAttribute('data-i18n');
+          if (key && langTranslations[key]) {
+            element.textContent = langTranslations[key];
+          }
+        });
+      }
+      
+      // Listen for language changes (instant update, no full reload)
+      window.addEventListener('languageChanged', () => {
+        updatePageContent();
+      });
+      
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        updatePageContent();
+        
+        // Test menu dropdown functionality
+        const testMenuButton = document.querySelector('.test-menu-button');
+        const testMenuDropdown = document.querySelector('.test-menu-dropdown');
+        const testMenuIcon = document.querySelector('.test-menu-icon');
+        const testMenuContainer = document.querySelector('.test-menu-container');
+        
+        if (testMenuButton && testMenuDropdown && testMenuIcon) {
+          // Toggle dropdown on button click
+          testMenuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const isOpen = !testMenuDropdown.classList.contains('hidden');
+            if (isOpen) {
+              testMenuDropdown.classList.add('hidden');
+              testMenuIcon.classList.remove('rotate-180');
+            } else {
+              testMenuDropdown.classList.remove('hidden');
+              testMenuIcon.classList.add('rotate-180');
+            }
+          });
+          
+          // Close dropdown when clicking outside
+          document.addEventListener('click', (e) => {
+            if (!testMenuContainer.contains(e.target)) {
+              testMenuDropdown.classList.add('hidden');
+              testMenuIcon.classList.remove('rotate-180');
+            }
+          });
+        }
+      });
+      
+      // Note: Service Worker disabled during development to avoid 404 noise
+      
+      // Global error handling
+      window.addEventListener('error', (event) => {
+        console.error('Global error:', event.error);
+      });
+      
+      // Performance monitoring
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const perfData = performance.getEntriesByType('navigation')[0];
+          console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart);
+        }, 0);
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Screen reader only class */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+</style>

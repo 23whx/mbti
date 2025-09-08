@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/global.css';
+---
+
+<BaseLayout title="MBTI Personality Test - Discover Your True Self">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero Section -->
+    <section class="text-center mb-16">
+      <div class="animate-fade-in">
+        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-6" data-i18n="index.hero_title">
+          MBTI Personality Test
+        </h1>
+        <p class="text-xl text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed" data-i18n="index.hero_subtitle">
+          A professional test based on psychology to help you understand your personality type, behavior patterns, and inner potential.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mb-8">
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-secondary-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span data-i18n="index.feature_68">68 professional questions</span>
+          </span>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-secondary-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span data-i18n="index.feature_cache">24h progress protection</span>
+          </span>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-secondary-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span data-i18n="index.feature_detail">Detailed results analysis</span>
+          </span>
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div class="space-y-4">
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/test?shuffle=true" class="btn-primary inline-flex items-center text-base px-6 py-3" data-i18n="nav.test_shuffled">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+              </svg>
+              Random Order Test
+            </a>
+            <a href="/test?shuffle=false" class="btn-secondary inline-flex items-center text-base px-6 py-3" data-i18n="nav.test_ordered">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+              Sequential Order Test
+            </a>
+          </div>
+          
+          <p class="text-sm text-gray-500" data-i18n="index.estimate">Estimated: 15–20 min | Free | No sign-up</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MBTI Introduction -->
+    <section class="mb-16">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-bold text-gray-900" data-i18n="index.what_title">What is MBTI?</h2>
+          <div class="prose text-gray-600 leading-relaxed">
+            <p class="text-lg mb-4" data-i18n="index.what_p1">
+              MBTI (Myers-Briggs Type Indicator) is a widely used personality framework that categorizes people into 16 distinct personality types.
+            </p>
+            <p class="mb-4" data-i18n="index.what_p2">
+              Each type is composed of four dimensions and helps you understand your preferences and behavior patterns in different contexts:
+            </p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="dimension-card primary">
+            <div class="text-center">
+              <div class="w-12 h-12 bg-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-white font-bold">E/I</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2" data-i18n="index.dim_energy_title">Energy Orientation</h3>
+              <p class="text-sm text-gray-600" data-i18n="index.dim_energy_pair">Extroversion vs Introversion</p>
+            </div>
+          </div>
+          
+          <div class="dimension-card primary">
+            <div class="text-center">
+              <div class="w-12 h-12 bg-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-white font-bold">S/N</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2" data-i18n="index.dim_info_title">Information Gathering</h3>
+              <p class="text-sm text-gray-600" data-i18n="index.dim_info_pair">Sensing vs Intuition</p>
+            </div>
+          </div>
+          
+          <div class="dimension-card primary">
+            <div class="text-center">
+              <div class="w-12 h-12 bg-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-white font-bold">T/F</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2" data-i18n="index.dim_decision_title">Decision Making</h3>
+              <p class="text-sm text-gray-600" data-i18n="index.dim_decision_pair">Thinking vs Feeling</p>
+            </div>
+          </div>
+          
+          <div class="dimension-card primary">
+            <div class="text-center">
+              <div class="w-12 h-12 bg-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-white font-bold">J/P</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 mb-2" data-i18n="index.dim_lifestyle_title">Lifestyle</h3>
+              <p class="text-sm text-gray-600" data-i18n="index.dim_lifestyle_pair">Judging vs Perceiving</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12" data-i18n="index.features_title">Features</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center group">
+          <div class="w-16 h-16 bg-secondary-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3" data-i18n="index.feature_title_reliable">Reliable & Professional</h3>
+          <p class="text-gray-600 leading-relaxed" data-i18n="index.feature_desc_reliable">Based on authoritative psychology theories with symmetric scoring to ensure accuracy and scientific validity.</p>
+        </div>
+        
+        <div class="text-center group">
+          <div class="w-16 h-16 bg-secondary-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3" data-i18n="index.feature_title_cache">Smart Caching</h3>
+          <p class="text-gray-600 leading-relaxed" data-i18n="index.feature_desc_cache">24h local caching to restore your last progress even after accidental closure.</p>
+        </div>
+        
+        <div class="text-center group">
+          <div class="w-16 h-16 bg-secondary-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3" data-i18n="index.feature_title_analysis">In-depth Analysis</h3>
+          <p class="text-gray-600 leading-relaxed" data-i18n="index.feature_desc_analysis">Detailed analysis report with strengths, growth advice, and career guidance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12" data-i18n="index.how_title">How it works</h2>
+      
+      <div class="max-w-3xl mx-auto">
+        <div class="space-y-8">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-secondary-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2" data-i18n="index.how_step1_title">Answer questions</h3>
+              <p class="text-gray-600" data-i18n="index.how_step1_desc">68 carefully designed items with a 1–5 Likert scale.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-secondary-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2" data-i18n="index.how_step2_title">Smart analysis</h3>
+              <p class="text-gray-600" data-i18n="index.how_step2_desc">Symmetric scoring ensures balanced and accurate dimensions.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-secondary-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2" data-i18n="index.how_step3_title">Get results</h3>
+              <p class="text-gray-600" data-i18n="index.how_step3_desc">Receive a detailed MBTI report with descriptions and advice.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12" data-i18n="index.faq_title">FAQ</h2>
+      
+      <div class="max-w-3xl mx-auto space-y-6">
+        <details class="bg-white rounded-lg border border-primary-100 p-6 hover:shadow-md transition-shadow duration-200">
+          <summary class="font-semibold text-gray-900 cursor-pointer select-none" data-i18n="index.faq_q1">How long does it take?</summary>
+          <p class="mt-3 text-gray-600 leading-relaxed" data-i18n="index.faq_a1">Usually 15–20 minutes for all 68 questions. Your progress is auto-saved.</p>
+        </details>
+        
+        <details class="bg-white rounded-lg border border-primary-100 p-6 hover:shadow-md transition-shadow duration-200">
+          <summary class="font-semibold text-gray-900 cursor-pointer select-none" data-i18n="index.faq_q2">What if I close the page?</summary>
+          <p class="mt-3 text-gray-600 leading-relaxed" data-i18n="index.faq_a2">No worries! Progress is saved for 24 hours and restored on reopen.</p>
+        </details>
+        
+        <details class="bg-white rounded-lg border border-primary-100 p-6 hover:shadow-md transition-shadow duration-200">
+          <summary class="font-semibold text-gray-900 cursor-pointer select-none" data-i18n="index.faq_q3">Are the results accurate?</summary>
+          <p class="mt-3 text-gray-600 leading-relaxed" data-i18n="index.faq_a3">Based on established MBTI theory and scientific scoring. For reference only.</p>
+        </details>
+        
+        <details class="bg-white rounded-lg border border-primary-100 p-6 hover:shadow-md transition-shadow duration-200">
+          <summary class="font-semibold text-gray-900 cursor-pointer select-none" data-i18n="index.faq_q4">Tips for best accuracy?</summary>
+          <p class="mt-3 text-gray-600 leading-relaxed" data-i18n="index.faq_a4">Answer honestly and quickly based on your first instinct.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="text-center bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4" data-i18n="index.final_title">Ready to start?</h2>
+      <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto" data-i18n="index.final_desc">
+        Take the MBTI test to discover yourself, understand your strengths, and find the best direction.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/test?shuffle=true" class="btn-primary inline-flex items-center text-base px-6 py-3" data-i18n="nav.test_shuffled">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+          </svg>
+          Random Order Test
+        </a>
+        <a href="/test?shuffle=false" class="btn-secondary inline-flex items-center text-base px-6 py-3" data-i18n="nav.test_ordered">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+          Sequential Order Test
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // 检查是否有缓存的测试进度
+  function checkTestProgress() {
+    try {
+      const cached = localStorage.getItem('mbti-answers-cache');
+      if (cached) {
+        const cache = JSON.parse(cached);
+        const isExpired = Date.now() - cache.timestamp > 24 * 60 * 60 * 1000;
+        
+        if (!isExpired && cache.progress > 0) {
+          // 显示继续测试的提示
+          showContinueTestBanner(cache.progress);
+        }
+      }
+    } catch (error) {
+      console.warn('检查测试进度失败:', error);
+    }
+  }
+  
+  function showContinueTestBanner(progress) {
+    const banner = document.createElement('div');
+    banner.className = 'fixed top-20 left-4 right-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white p-4 rounded-lg shadow-lg z-50 animate-slide-up';
+    banner.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+          </svg>
+          <span>您有未完成的测试进度 (${progress}/68 题)</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="/test" class="bg-white text-primary-600 px-3 py-1 rounded font-medium text-sm hover:bg-gray-100 transition-colors">
+            继续测试
+          </a>
+          <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-white hover:text-gray-200 transition-colors">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(banner);
+    
+    // 5秒后自动隐藏
+    setTimeout(() => {
+      if (banner.parentElement) {
+        banner.remove();
+      }
+    }, 5000);
+  }
+  
+  // 页面加载完成后检查
+  document.addEventListener('DOMContentLoaded', checkTestProgress);
+</script>

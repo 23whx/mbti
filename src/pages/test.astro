@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Questionnaire from '../components/react/Questionnaire.tsx';
+import '../styles/global.css';
+---
+
+<BaseLayout 
+  title="MBTI Personality Test - Questionnaire"
+  description="Start your MBTI personality test with 68 professional questions."
+  className="bg-secondary-50"
+>
+  <div class="min-h-screen">
+    <!-- 测试说明 -->
+    <div class="bg-white border-b border-primary-100">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold text-gray-900 mb-4" data-i18n="test.title">MBTI Personality Test</h1>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed" data-i18n="test.intro">
+            Answer according to your true feelings and first instinct. There are no right or wrong answers.
+          </p>
+          
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+            <div class="flex items-center justify-center space-x-2 text-sm text-gray-600">
+              <svg class="w-5 h-5 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span data-i18n="test.tips_honest">Be honest</span>
+            </div>
+            
+            <div class="flex items-center justify-center space-x-2 text-sm text-gray-600">
+              <svg class="w-5 h-5 text-secondary-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+              </svg>
+              <span data-i18n="test.tips_instinct">Trust your instinct</span>
+            </div>
+            
+            <div class="flex items-center justify-center space-x-2 text-sm text-gray-600">
+              <svg class="w-5 h-5 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+              </svg>
+              <span data-i18n="test.tips_fast">Do not overthink</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 问卷组件 (React岛屿) -->
+    <Questionnaire client:load />
+
+    <!-- 测试提示信息 -->
+    <div class="bg-secondary-50 border-t border-secondary-100">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3" data-i18n="test.suggest_title">Suggestions</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center">
+                <svg class="w-4 h-4 text-primary-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span data-i18n="test.suggest_1">Choose the option closest to your true thoughts</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-4 h-4 text-primary-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span data-i18n="test.suggest_2">Avoid over-analysis, trust your first reaction</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-4 h-4 text-primary-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span data-i18n="test.suggest_3">Answer based on your natural state</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3" data-i18n="test.scoring_title">Scoring Guide</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+              <div class="flex items-center justify-between">
+                <span data-i18n="test.score_1">1</span>
+                <span data-i18n="test.score_1_text">Strongly Disagree</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span data-i18n="test.score_2">2</span>
+                <span data-i18n="test.score_2_text">Disagree</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span data-i18n="test.score_3">3</span>
+                <span data-i18n="test.score_3_text">Neutral/Unsure</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span data-i18n="test.score_4">4</span>
+                <span data-i18n="test.score_4_text">Agree</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span data-i18n="test.score_5">5</span>
+                <span data-i18n="test.score_5_text">Strongly Agree</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-white rounded-lg border border-primary-200">
+          <div class="flex items-start space-x-3">
+            <svg class="w-5 h-5 text-primary-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+              <h4 class="font-medium text-gray-900 mb-1" data-i18n="test.progress_title">Progress Auto-Save</h4>
+              <p class="text-sm text-gray-600" data-i18n="test.progress_text">
+                Your answers are saved for 24 hours locally. You can pause anytime and resume later.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<style>
+  /* 确保移动端的触控体验 */
+  @media (max-width: 768px) {
+    .likert-button {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+  
+  /* 平滑滚动 */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* 防止内容跳跃 */
+  #questionnaire-container {
+    min-height: 400px;
+  }
+</style>

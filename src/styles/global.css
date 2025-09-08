@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义组件样式 */
+@layer components {
+  /* 主要按钮样式 */
+  .btn-primary {
+    @apply bg-primary-500 text-white font-medium px-6 py-3 rounded-lg
+           hover:bg-primary-600 
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200 transform hover:scale-105 active:scale-95;
+  }
+  
+  /* 次要按钮样式 */
+  .btn-secondary {
+    @apply bg-white text-primary-600 border-2 border-primary-200 font-medium px-6 py-3 rounded-lg
+           hover:bg-primary-50 hover:border-primary-300
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           transition-all duration-200;
+  }
+  
+  /* Likert量表按钮 */
+  .likert-button {
+    @apply w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-primary-200 bg-white
+           hover:border-primary-300 hover:bg-primary-50
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           active:scale-95 transition-all duration-150
+           flex items-center justify-center font-medium text-gray-700;
+  }
+  
+  .likert-button.selected {
+    @apply border-primary-500 bg-primary-400 text-white
+           shadow-lg shadow-primary-200;
+  }
+  
+  .likert-button:disabled {
+    @apply opacity-50 cursor-not-allowed hover:border-primary-200 hover:bg-white;
+  }
+  
+  /* 紧凑型Likert量表按钮 */
+  .likert-button-compact {
+    @apply w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-200 bg-white
+           hover:border-primary-300 hover:bg-primary-50
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           active:scale-95 transition-all duration-150
+           flex items-center justify-center font-medium text-gray-700 text-sm;
+  }
+  
+  .likert-button-compact.selected {
+    @apply border-primary-500 bg-primary-400 text-white
+           shadow-lg shadow-primary-200;
+  }
+  
+  .likert-button-compact:disabled {
+    @apply opacity-50 cursor-not-allowed hover:border-primary-200 hover:bg-white;
+  }
+  
+  /* Likert量表标签 */
+  .likert-label {
+    @apply text-[8px] text-gray-500 mt-1 leading-tight text-center whitespace-nowrap;
+  }
+  
+  /* 题目卡片样式 */
+  .question-card {
+    @apply bg-white border border-secondary-200 rounded-xl p-6 mb-6
+           shadow-sm hover:shadow-md transition-all duration-200
+           animate-fade-in;
+  }
+
+  .question-card.answered {
+    @apply border-primary-200 bg-primary-50/30;
+  }
+  
+  /* 进度条样式 */
+  .progress-bar {
+    @apply w-full bg-primary-100 rounded-full h-2 overflow-hidden;
+  }
+  
+  .progress-fill {
+    @apply bg-primary-400 h-full
+           transition-all duration-500 ease-out rounded-full;
+  }
+  
+  /* 维度分析卡片 */
+  .dimension-card {
+    @apply bg-white rounded-xl p-6 border border-secondary-200 shadow-sm
+           hover:shadow-md transition-all duration-200;
+  }
+
+  .dimension-card.primary {
+    @apply border-primary-200 bg-primary-50;
+  }
+
+  .dimension-card.secondary {
+    @apply border-secondary-200 bg-secondary-50;
+  }
+  
+  /* 结果类型卡片 */
+  .result-card {
+    @apply bg-white border border-primary-200 rounded-2xl p-8 text-center
+           shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  /* 工具提示样式 */
+  .tooltip {
+    @apply absolute z-50 px-3 py-2 text-sm bg-gray-900 text-white rounded-lg
+           opacity-0 invisible transition-all duration-200
+           -translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0;
+  }
+  
+  /* 加载动画 */
+  .loading-dots {
+    @apply inline-flex space-x-1;
+  }
+  
+  .loading-dots > div {
+    @apply w-2 h-2 bg-primary-500 rounded-full animate-pulse;
+    animation-delay: calc(var(--i) * 0.2s);
+  }
+  
+  /* 移动端优化 */
+  @media (max-width: 768px) {
+    .question-card {
+      @apply p-4 mb-4 rounded-lg;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+      @apply px-4 py-3 text-sm;
+    }
+    
+    .likert-button {
+      @apply w-11 h-11 text-sm;
+    }
+  }
+  
+  /* 深色模式支持（可选） */
+  @media (prefers-color-scheme: dark) {
+    .question-card {
+      @apply bg-gray-800 border-gray-700 text-white;
+    }
+    
+    .dimension-card {
+      @apply bg-gray-800 border-gray-700 text-white;
+    }
+  }
+}
+
+/* 自定义动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f87171;  /* 淡红色 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;  /* 稍深的红色 */
+}
+
+/* 选择高亮美化 */
+::selection {
+  background: rgba(220, 38, 38, 0.2);
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(220, 38, 38, 0.2);
+  color: inherit;
+}
+
+/* 焦点样式统一 */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* 减少动画（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .question-card {
+    @apply border-2 border-gray-800;
+  }
+  
+  .btn-primary {
+    @apply bg-black text-white;
+  }
+  
+  .likert-button {
+    @apply border-2 border-black;
+  }
+}

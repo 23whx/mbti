@@ -1,0 +1,533 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ResultChart from '../components/react/ResultChart.tsx';
+import '../styles/global.css';
+---
+
+<BaseLayout 
+  title="MBTI Test Results - Discover Your Personality Type"
+  description="View your MBTI test results, learn your personality type, strengths, and development advice."
+  className="bg-gradient-to-br from-primary-50 to-secondary-50"
+>
+  <div class="min-h-screen py-12">
+    <!-- 结果容器 -->
+    <div id="result-container" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- 加载状态 -->
+      <div id="loading-result" class="text-center py-20">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-gray-600" data-i18n="result.loading">Analyzing your personality type...</p>
+      </div>
+
+      <!-- 无结果状态 -->
+      <div id="no-result" class="text-center py-20 hidden">
+        <div class="max-w-md mx-auto">
+          <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+          </svg>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="result.no_result_title">No test result found</h2>
+          <p class="text-gray-600 mb-6" data-i18n="result.no_result_desc">Please complete the MBTI test first to view the results.</p>
+          <a href="/test" class="btn-primary" data-i18n="result.start_test">Start Test</a>
+        </div>
+      </div>
+
+      <!-- 结果内容 (将通过JavaScript动态填充) -->
+      <div id="result-content" class="hidden space-y-12">
+        
+        <!-- 主要结果卡片 -->
+        <div class="result-card">
+          <div class="mb-6">
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-2" id="mbti-type">
+              <!-- 动态填充 -->
+            </h1>
+            <h2 class="text-2xl text-gray-700 font-semibold mb-4" id="type-name">
+              <!-- 动态填充 -->
+            </h2>
+            <p class="text-lg text-gray-600 leading-relaxed" id="type-description">
+              <!-- 动态填充 -->
+            </p>
+          </div>
+          
+          <!-- 分享按钮 -->
+          <div class="flex flex-wrap justify-center gap-3 mt-6">
+            <button class="share-btn" data-platform="copy">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path>
+              </svg>
+              复制链接
+            </button>
+            
+            <button class="share-btn" data-platform="twitter">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+              </svg>
+              Twitter
+            </button>
+            
+            <button class="share-btn" data-platform="facebook">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Facebook
+            </button>
+          </div>
+        </div>
+
+        <!-- 维度分析图表 -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg border border-primary-100">
+          <div id="chart-container">
+            <!-- 简化的图表显示，不使用复杂的React组件 -->
+            <div class="text-center mb-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-2" data-i18n="result.analysis_title">Dimension Analysis</h3>
+              <p class="text-gray-600" data-i18n="result.analysis_desc">Your preference strength across the four core dimensions is shown below.</p>
+            </div>
+            <div id="simple-chart" class="space-y-6">
+              <!-- 将通过JavaScript动态填充 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 性格特征详情 -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- 优势特点 -->
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-secondary-100">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center" data-i18n="result.strengths">
+              <svg class="w-6 h-6 text-secondary-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              Strengths
+            </h3>
+            <ul id="strengths-list" class="space-y-2">
+              <!-- 动态填充 -->
+            </ul>
+          </div>
+
+          <!-- 发展建议 -->
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-primary-100">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center" data-i18n="result.weaknesses">
+              <svg class="w-6 h-6 text-primary-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+              </svg>
+              Areas for Attention
+            </h3>
+            <ul id="weaknesses-list" class="space-y-2">
+              <!-- 动态填充 -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- 职业建议 -->
+        <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-8 border border-primary-100">
+          <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center" data-i18n="result.careers">
+            <svg class="w-6 h-6 text-primary-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            Suggested Careers
+          </h3>
+          <div id="careers-container" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <!-- 动态填充 -->
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="text-center space-y-4">
+          <div class="space-x-4">
+            <button id="retake-test" class="btn-secondary" data-i18n="result.retake">Retake Test</button>
+            <button id="download-result" class="btn-primary" data-i18n="result.download">Download Result</button>
+          </div>
+          <p class="text-sm text-gray-500" data-i18n="result.disclaimer">For reference only. Not a professional diagnosis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // MBTI类型描述数据
+  const mbtiDescriptions = {
+    'INTJ': {
+      name: '建筑师',
+      description: '富有想像力和战略能力的创新者，一切皆在计划之中。',
+      strengths: ['独立思考', '战略规划', '高效执行', '创新能力'],
+      weaknesses: ['过分批判', '对细节不耐烦', '情感表达困难'],
+      careers: ['科学家', '工程师', '建筑师', '管理顾问', '系统分析师']
+    },
+    'INTP': {
+      name: '思想家',
+      description: '具有创造力的思想家，对知识有着止不住的渴望。',
+      strengths: ['逻辑思维', '理论创新', '客观分析', '学习能力'],
+      weaknesses: ['拖延倾向', '社交困难', '实践能力不足'],
+      careers: ['研究员', '程序员', '哲学家', '数学家', '理论物理学家']
+    },
+    'ENTJ': {
+      name: '指挥官',
+      description: '大胆、富有想像力且意志强大的领导者，总能创造奇迹。',
+      strengths: ['领导能力', '战略思维', '决策果断', '目标导向'],
+      weaknesses: ['过于强势', '忽视情感', '缺乏耐心'],
+      careers: ['CEO', '企业家', '投资银行家', '管理咨询师', '律师']
+    },
+    'ENTP': {
+      name: '辩论家',
+      description: '聪明好奇的发明者，不会放弃任何智力上的挑战。',
+      strengths: ['创新思维', '适应能力', '沟通技巧', '学习速度'],
+      weaknesses: ['注意力分散', '完成困难', '规则抗拒'],
+      careers: ['企业家', '营销经理', '记者', '咨询师', '发明家']
+    },
+    'INFJ': {
+      name: '提倡者',
+      description: '安静而神秘，同时鼓舞人心且不知疲倦的理想主义者。',
+      strengths: ['洞察人心', '理想主义', '坚持不懈', '创造力'],
+      weaknesses: ['过度敏感', '完美主义', '容易倦怠'],
+      careers: ['心理咨询师', '作家', '教师', '社会工作者', '艺术家']
+    },
+    'INFP': {
+      name: '调停者',
+      description: '诗意、善良的利他主义者，总是热情地提供帮助。',
+      strengths: ['同理心', '创造力', '适应能力', '价值驱动'],
+      weaknesses: ['过度理想化', '决策困难', '自我批判'],
+      careers: ['作家', '心理学家', '艺术家', '记者', '社会工作者']
+    },
+    'ENFJ': {
+      name: '主人公',
+      description: '富有魅力且鼓舞人心的领导者，拥有使听众信服的能力。',
+      strengths: ['领导魅力', '沟通能力', '同理心', '激励他人'],
+      weaknesses: ['过度理想化', '自我牺牲', '决策犹豫'],
+      careers: ['教师', '培训师', '心理咨询师', 'HR经理', '政治家']
+    },
+    'ENFP': {
+      name: '竞选者',
+      description: '热情、有创造力且善于社交，总能找到理由微笑。',
+      strengths: ['热情感染', '创新能力', '沟通技巧', '适应性强'],
+      weaknesses: ['注意力分散', '情绪波动', '规划困难'],
+      careers: ['销售员', '记者', '演员', '企业家', '培训师']
+    },
+    'ISTJ': {
+      name: '物流师',
+      description: '实际且稳重的守护者，所有事情都井井有条。',
+      strengths: ['责任感强', '组织能力', '可靠稳定', '细致认真'],
+      weaknesses: ['抗拒变化', '过于严肃', '缺乏灵活性'],
+      careers: ['会计师', '银行家', '审计师', '工程师', '法官']
+    },
+    'ISFJ': {
+      name: '守护者',
+      description: '利他主义的保护者，对他们关心的人和事物非常忠诚。',
+      strengths: ['服务精神', '细心体贴', '忠诚可靠', '实用主义'],
+      weaknesses: ['自我牺牲', '抗拒冲突', '变化困难'],
+      careers: ['护士', '教师', '社会工作者', '图书管理员', '人事专员']
+    },
+    'ESTJ': {
+      name: '总经理',
+      description: '出色的管理者，在管理人事和事务方面无与伦比。',
+      strengths: ['组织能力', '执行力强', '责任心', '目标导向'],
+      weaknesses: ['固执己见', '缺乏灵活性', '忽视情感'],
+      careers: ['经理', '行政人员', '法官', '军官', '银行家']
+    },
+    'ESFJ': {
+      name: '执政官',
+      description: '热心、有责任心且受人喜爱，总是积极参与身边的一切事务。',
+      strengths: ['人际关系', '责任感', '合作精神', '组织能力'],
+      weaknesses: ['过度在意他人看法', '抗拒批评', '变化困难'],
+      careers: ['销售代表', '护士', '教师', '人事经理', '活动策划']
+    },
+    'ISTP': {
+      name: '鉴赏家',
+      description: '灵活且容忍度高的实验家，对各种工具都有极高的熟练度。',
+      strengths: ['实践能力', '适应性强', '冷静理性', '问题解决'],
+      weaknesses: ['情感表达困难', '长期规划不足', '团队合作困难'],
+      careers: ['机械师', '工程师', '飞行员', '程序员', '外科医生']
+    },
+    'ISFP': {
+      name: '探险家',
+      description: '灵活且有魅力的艺术家，时刻准备去探索新的体验。',
+      strengths: ['艺术感觉', '适应能力', '温和友善', '价值观坚定'],
+      weaknesses: ['竞争力不足', '规划困难', '自信心不足'],
+      careers: ['艺术家', '设计师', '音乐家', '摄影师', '心理咨询师']
+    },
+    'ESTP': {
+      name: '企业家',
+      description: '聪明、精力充沛且有魅力的人，喜欢享受当下的乐趣。',
+      strengths: ['行动力强', '适应能力', '沟通技巧', '现实感强'],
+      weaknesses: ['缺乏长远规划', '冲动行事', '理论学习困难'],
+      careers: ['销售员', '企业家', '运动员', '演员', '警察']
+    },
+    'ESFP': {
+      name: '表演者',
+      description: '热情、友好且受人喜爱的人，总能发现生活中的乐趣。',
+      strengths: ['热情感染', '人际关系', '适应能力', '实用主义'],
+      weaknesses: ['规划能力不足', '容易分心', '抗拒批评'],
+      careers: ['演员', '销售员', '教师', '社会工作者', '活动策划']
+    }
+  };
+
+  // 页面加载完成后执行
+  document.addEventListener('DOMContentLoaded', () => {
+    initializePage();
+  });
+
+  function initializePage() {
+    const loadingEl = document.getElementById('loading-result');
+    const noResultEl = document.getElementById('no-result');
+    const contentEl = document.getElementById('result-content');
+    
+    // 从localStorage读取结果
+    const result = loadTestResult();
+    
+    if (!result) {
+      // 没有结果，显示提示
+      loadingEl?.classList.add('hidden');
+      noResultEl?.classList.remove('hidden');
+      return;
+    }
+    
+    // 有结果，显示内容
+    loadingEl?.classList.add('hidden');
+    contentEl?.classList.remove('hidden');
+    
+    // 填充结果数据
+    fillResultData(result);
+    
+    // 渲染简化图表
+    renderSimpleChart(result);
+    
+    // 绑定事件
+    bindEvents();
+  }
+
+  function loadTestResult() {
+    try {
+      const cached = localStorage.getItem('mbti-test-result');
+      return cached ? JSON.parse(cached) : null;
+    } catch (error) {
+      console.warn('无法读取测试结果:', error);
+      return null;
+    }
+  }
+
+  function fillResultData(result) {
+    const { mbtiType, scores } = result;
+    const typeInfo = mbtiDescriptions[mbtiType];
+    
+    if (!typeInfo) {
+      console.error('未找到类型描述:', mbtiType);
+      return;
+    }
+    
+    // 填充基本信息
+    document.getElementById('mbti-type').textContent = mbtiType;
+    document.getElementById('type-name').textContent = typeInfo.name;
+    document.getElementById('type-description').textContent = typeInfo.description;
+    
+    // 填充优势特点
+    const strengthsList = document.getElementById('strengths-list');
+    if (strengthsList && typeInfo.strengths) {
+      strengthsList.innerHTML = typeInfo.strengths.map(strength => 
+        `<li class="flex items-center text-gray-700">
+          <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+          ${strength}
+        </li>`
+      ).join('');
+    }
+    
+    // 填充注意事项
+    const weaknessesList = document.getElementById('weaknesses-list');
+    if (weaknessesList && typeInfo.weaknesses) {
+      weaknessesList.innerHTML = typeInfo.weaknesses.map(weakness => 
+        `<li class="flex items-center text-gray-700">
+          <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+          ${weakness}
+        </li>`
+      ).join('');
+    }
+    
+    // 填充职业建议
+    const careersContainer = document.getElementById('careers-container');
+    if (careersContainer && typeInfo.careers) {
+      careersContainer.innerHTML = typeInfo.careers.map(career => 
+        `<div class="bg-white rounded-lg p-3 text-center border border-red-200 hover:border-red-300 transition-colors">
+          <span class="text-sm font-medium text-gray-700">${career}</span>
+        </div>`
+      ).join('');
+    }
+  }
+
+  function renderSimpleChart(result) {
+    const container = document.getElementById('simple-chart');
+    if (!container) return;
+
+    const { scores, mbtiType } = result;
+    
+    // 计算维度强度
+    const dimensions = [
+      {
+        name: '能量导向',
+        pair: ['外向 (E)', '内向 (I)'],
+        values: [
+          Math.round((scores.E / (scores.E + scores.I)) * 100),
+          Math.round((scores.I / (scores.E + scores.I)) * 100)
+        ],
+        result: mbtiType[0]
+      },
+      {
+        name: '信息获取',
+        pair: ['感觉 (S)', '直觉 (N)'],
+        values: [
+          Math.round((scores.S / (scores.S + scores.N)) * 100),
+          Math.round((scores.N / (scores.S + scores.N)) * 100)
+        ],
+        result: mbtiType[1]
+      },
+      {
+        name: '决策方式',
+        pair: ['思考 (T)', '情感 (F)'],
+        values: [
+          Math.round((scores.T / (scores.T + scores.F)) * 100),
+          Math.round((scores.F / (scores.T + scores.F)) * 100)
+        ],
+        result: mbtiType[2]
+      },
+      {
+        name: '生活方式',
+        pair: ['判断 (J)', '知觉 (P)'],
+        values: [
+          Math.round((scores.J / (scores.J + scores.P)) * 100),
+          Math.round((scores.P / (scores.J + scores.P)) * 100)
+        ],
+        result: mbtiType[3]
+      }
+    ];
+
+    container.innerHTML = dimensions.map((dimension, index) => `
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+          ${dimension.name}
+          <span class="ml-3 px-3 py-1 rounded-full text-sm font-bold text-white ${
+            ['E', 'S', 'T', 'J'].includes(dimension.result) 
+              ? 'bg-red-500' 
+              : 'bg-green-500'
+          }">
+            ${dimension.result}
+          </span>
+        </h4>
+        ${dimension.pair.map((label, pairIndex) => {
+          const value = dimension.values[pairIndex];
+          const isResult = label.includes(dimension.result);
+          
+          // 所有百分比统一使用淡红色
+          let barColor = 'bg-gray-300';
+          if (isResult) {
+            barColor = 'bg-red-300';  // 统一淡红色
+          }
+          
+          return `
+            <div class="flex items-center space-x-4 mb-2">
+              <div class="w-20 text-sm font-medium text-gray-700 text-right">
+                ${label}
+              </div>
+              <div class="flex-1 relative">
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                  <div 
+                    class="h-full rounded-full transition-all duration-1000 ${barColor}"
+                    style="width: ${value}%"
+                  ></div>
+                </div>
+                <div class="absolute right-0 -top-6 text-xs font-semibold text-gray-600">
+                  ${value}%
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `).join('');
+  }
+
+  function bindEvents() {
+    // 重新测试
+    const retakeBtn = document.getElementById('retake-test');
+    retakeBtn?.addEventListener('click', () => {
+      if (confirm('确定要重新开始测试吗？当前结果将被清除。')) {
+        localStorage.removeItem('mbti-test-result');
+        localStorage.removeItem('mbti-answers-cache');
+        window.location.href = '/test';
+      }
+    });
+    
+    // 下载结果
+    const downloadBtn = document.getElementById('download-result');
+    downloadBtn?.addEventListener('click', () => {
+      window.print();
+    });
+    
+    // 分享功能
+    const shareButtons = document.querySelectorAll('.share-btn');
+    shareButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const platform = e.currentTarget.dataset.platform;
+        handleShare(platform);
+      });
+    });
+  }
+
+  function handleShare(platform) {
+    const mbtiType = document.getElementById('mbti-type')?.textContent;
+    const typeName = document.getElementById('type-name')?.textContent;
+    const url = window.location.href;
+    const text = `我的MBTI性格类型是 ${mbtiType} (${typeName})！快来测试你的性格类型吧！`;
+    
+    switch (platform) {
+      case 'copy':
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(() => {
+            showToast('链接已复制到剪贴板');
+          });
+        }
+        break;
+        
+      case 'twitter':
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`);
+        break;
+        
+      case 'facebook':
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        break;
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
+</script>
+
+<style>
+  .share-btn {
+    @apply flex items-center space-x-2 px-4 py-2 bg-white border border-primary-200 rounded-lg
+           hover:bg-primary-50 hover:border-primary-300 transition-colors text-sm font-medium text-gray-700;
+  }
+  
+  /* 打印样式 */
+  @media print {
+    .share-btn,
+    #retake-test,
+    #download-result {
+      display: none;
+    }
+    
+    body {
+      background: white !important;
+    }
+    
+    .result-card,
+    .dimension-card {
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+  }
+</style>
