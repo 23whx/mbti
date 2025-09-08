@@ -68,7 +68,7 @@ const ResultChart: React.FC<ResultChartProps> = ({ scores, mbtiType }) => {
           <div className="space-y-4">
             {dimension.pair.map((label, pairIndex) => {
               const value = dimension.values[pairIndex];
-              const isStronger = value > 50;
+              // const isStronger = value > 50;
               const isResult = label.includes(dimension.result);
               
               return (

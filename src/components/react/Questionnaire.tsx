@@ -70,7 +70,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete }) => {
   const [showAll, setShowAll] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<LocaleCode>('en-US');
   const [shuffledQuestions, setShuffledQuestions] = useState(questions);
-  const [shouldShuffle, setShouldShuffle] = useState(true);
+  const [, setShouldShuffle] = useState(true);
 
   // 获取当前语言
   const getCurrentLanguage = (): LocaleCode => {
@@ -282,10 +282,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete }) => {
     setShowAll(prev => !prev);
   }, []);
 
-  // 跳转到特定题目
-  const goToQuestion = useCallback((index: number) => {
-    setCurrentQuestionIndex(index);
-  }, []);
+  // 跳转到特定题目 (保留以备后用)
+  // const goToQuestion = useCallback((index: number) => {
+  //   setCurrentQuestionIndex(index);
+  // }, []);
 
   // 当前显示的题目
   const displayQuestions = showAll ? shuffledQuestions : shuffledQuestions.slice(0, Math.max(10, currentQuestionIndex + 5));
@@ -432,7 +432,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete }) => {
           <div className="bg-white rounded-lg shadow-lg border border-primary-100 p-3 max-h-80 overflow-y-auto">
             <div className="text-xs font-medium text-gray-600 mb-2">{t('quick_nav')}</div>
             <div className="grid grid-cols-4 gap-1">
-              {shuffledQuestions.map((question, index) => (
+              {shuffledQuestions.map((question) => (
                 <button
                   key={question.id}
                   onClick={() => {

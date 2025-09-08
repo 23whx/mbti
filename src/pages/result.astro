@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ResultChart from '../components/react/ResultChart.tsx';
+// import ResultChart from '../components/react/ResultChart.tsx';
 import '../styles/global.css';
 ---
 
@@ -304,9 +304,9 @@ import '../styles/global.css';
     }
   }
 
-  function fillResultData(result) {
-    const { mbtiType, scores } = result;
-    const typeInfo = mbtiDescriptions[mbtiType];
+  function fillResultData(result: any) {
+    const { mbtiType } = result;
+    const typeInfo = (mbtiDescriptions as any)[mbtiType];
     
     if (!typeInfo) {
       console.error('未找到类型描述:', mbtiType);
@@ -314,14 +314,18 @@ import '../styles/global.css';
     }
     
     // 填充基本信息
-    document.getElementById('mbti-type').textContent = mbtiType;
-    document.getElementById('type-name').textContent = typeInfo.name;
-    document.getElementById('type-description').textContent = typeInfo.description;
+    const mbtiTypeEl = document.getElementById('mbti-type');
+    const typeNameEl = document.getElementById('type-name');
+    const typeDescEl = document.getElementById('type-description');
+    
+    if (mbtiTypeEl) mbtiTypeEl.textContent = mbtiType;
+    if (typeNameEl) typeNameEl.textContent = typeInfo.name;
+    if (typeDescEl) typeDescEl.textContent = typeInfo.description;
     
     // 填充优势特点
     const strengthsList = document.getElementById('strengths-list');
     if (strengthsList && typeInfo.strengths) {
-      strengthsList.innerHTML = typeInfo.strengths.map(strength => 
+      strengthsList.innerHTML = typeInfo.strengths.map((strength: any) => 
         `<li class="flex items-center text-gray-700">
           <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
           ${strength}
@@ -332,7 +336,7 @@ import '../styles/global.css';
     // 填充注意事项
     const weaknessesList = document.getElementById('weaknesses-list');
     if (weaknessesList && typeInfo.weaknesses) {
-      weaknessesList.innerHTML = typeInfo.weaknesses.map(weakness => 
+      weaknessesList.innerHTML = typeInfo.weaknesses.map((weakness: any) => 
         `<li class="flex items-center text-gray-700">
           <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
           ${weakness}
@@ -343,7 +347,7 @@ import '../styles/global.css';
     // 填充职业建议
     const careersContainer = document.getElementById('careers-container');
     if (careersContainer && typeInfo.careers) {
-      careersContainer.innerHTML = typeInfo.careers.map(career => 
+      careersContainer.innerHTML = typeInfo.careers.map((career: any) => 
         `<div class="bg-white rounded-lg p-3 text-center border border-red-200 hover:border-red-300 transition-colors">
           <span class="text-sm font-medium text-gray-700">${career}</span>
         </div>`
@@ -351,7 +355,7 @@ import '../styles/global.css';
     }
   }
 
-  function renderSimpleChart(result) {
+  function renderSimpleChart(result: any) {
     const container = document.getElementById('simple-chart');
     if (!container) return;
 
@@ -397,7 +401,7 @@ import '../styles/global.css';
       }
     ];
 
-    container.innerHTML = dimensions.map((dimension, index) => `
+    container.innerHTML = dimensions.map((dimension) => `
       <div class="bg-gray-50 rounded-lg p-4">
         <h4 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
           ${dimension.name}
@@ -463,13 +467,13 @@ import '../styles/global.css';
     const shareButtons = document.querySelectorAll('.share-btn');
     shareButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const platform = e.currentTarget.dataset.platform;
+        const platform = (e.currentTarget as HTMLElement)?.dataset?.platform;
         handleShare(platform);
       });
     });
   }
 
-  function handleShare(platform) {
+  function handleShare(platform: any) {
     const mbtiType = document.getElementById('mbti-type')?.textContent;
     const typeName = document.getElementById('type-name')?.textContent;
     const url = window.location.href;
@@ -494,7 +498,7 @@ import '../styles/global.css';
     }
   }
 
-  function showToast(message) {
+  function showToast(message: any) {
     const toast = document.createElement('div');
     toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
     toast.textContent = message;

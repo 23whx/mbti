@@ -496,9 +496,9 @@ const {
       };
       
       // Get current language from localStorage
-      function getCurrentLanguage() {
+      function getCurrentLanguage(): string {
         const saved = localStorage.getItem('mbti-language');
-        if (saved && translations[saved]) {
+        if (saved && saved in translations) {
           return saved;
         }
         // Default to English when no saved preference
@@ -508,7 +508,7 @@ const {
       // Update page content based on current language
       function updatePageContent() {
         const currentLang = getCurrentLanguage();
-        const langTranslations = translations[currentLang] || translations['en-US'];
+        const langTranslations = (translations as any)[currentLang] || (translations as any)['en-US'];
         
         // Update document language
         document.documentElement.lang = currentLang === 'zh-CN' ? 'zh-CN' : 
@@ -556,7 +556,7 @@ const {
           
           // Close dropdown when clicking outside
           document.addEventListener('click', (e) => {
-            if (!testMenuContainer.contains(e.target)) {
+            if (testMenuContainer && e.target instanceof Node && !testMenuContainer.contains(e.target)) {
               testMenuDropdown.classList.add('hidden');
               testMenuIcon.classList.remove('rotate-180');
             }
@@ -574,8 +574,10 @@ const {
       // Performance monitoring
       window.addEventListener('load', () => {
         setTimeout(() => {
-          const perfData = performance.getEntriesByType('navigation')[0];
-          console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart);
+          const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+          if (perfData && perfData.loadEventEnd && perfData.loadEventStart) {
+            console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart);
+          }
         }, 0);
       });
     </script>
